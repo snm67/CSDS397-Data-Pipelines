@@ -3,11 +3,6 @@ from datetime import datetime
 
 # Creates and returns DataFrames for employee and department datasets.
 def create_dataframes():
-    # Department dataset
-    departments_data = {
-        'Department_ID': [1, 2, 3, 4, 5, 6],
-        'Department_Name': ['Engineering', 'Data', 'Product', 'HR', 'Sales', 'Design']
-    }
 
     # Employee dataset
     employees_data = {
