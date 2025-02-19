@@ -1,4 +1,5 @@
 #!/bin/bash
+#what is happening
 
 # Ensure the script is run as root to install MySQL
 if [ "$(whoami)" != "root" ]; then
@@ -24,22 +25,17 @@ create_database_and_tables() {
   CREATE DATABASE company;
   USE company;
 
-  -- Create departments table
-  CREATE TABLE departments (
-    Department_ID INT PRIMARY KEY,
-    Department_Name VARCHAR(255)
-  );
-
-  -- Create employees table
-  CREATE TABLE employees (
+  -- Create employee_data_source table
+  CREATE TABLE employee_data_source (
     Employee_ID INT,
-    Job_Title VARCHAR(255),
-    Salary INT,
+    Name VARCHAR(255),
+    Age INT,
+    Department VARCHAR(255),
+    Hiring_Date,
     Years_of_Experience INT,
-    Department_ID INT,
-    Zip_Code VARCHAR(255),
-    Location VARCHAR(255),
-    hiring_date VARCHAR(255)
+    Country VARCHAR(255),
+    Salary INT,
+    Performance_Rating VARCHAR(255)
   );
   "
   mysql -u root -e " SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION';"
@@ -52,30 +48,13 @@ insert_data() {
   mysql -u root -e "
   USE company;
 
-  -- Insert data into departments table
-  INSERT INTO departments (Department_ID, Department_Name) VALUES
-    (1, 'Engineering'),
-    (2, 'Data'),
-    (3, 'Product'),
-    (4, 'HR'),
-    (5, 'Sales'),
-    (6, 'Design');
-
-  -- Insert data into employees table
-    INSERT INTO employees (Employee_ID, Job_Title, Salary, Years_of_Experience, Department_ID, Zip_Code, Location, hiring_date) VALUES
-    (1, 'Software Engineer', 0, 3, 1, '12345', 'NY', '2020-01-01'),
-    (2, 'Data Scientist', 105000, 4, 2, 'ABCDE', 'New York', '01-05-2019'),
-    (3, 'Product Manager', 120000, 5, 3, '23456', 'Claveland', '2018-12-15'),
-    (4, 'Software Engineer', 110000, 4, 9, '98765', 'San Francisco', '2022-07-15'),
-    (5, 'Data Analyst', 85000, 2, 2, 'A1234', 'New York', '12-11-2021'),
-    (6, 'HR Manager', 95000, 6, 4, '54321', 'NY', '2020-05-10'),
-    (7, 'Sales Manager', 115000, 8, 5, '1234X', 'New York', '2021-08-20'),
-    (8, 'Project Manager', 105000, 3, 3, '65432', 'New York', '2019-03-10'),
-    (9, 'UX Designer', 90000, 4, 6, '11111', 'Cleveland', '2020-11-05'),
-    (10, 'Operations Manager', 400000, 7, NULL, '00000', 'San Francisco', NULL),
-    (3, 'Product Manager', 120000, 5, 3, '23456', 'Claveland', '2018-12-15');
-
-    SELECT * FROM departments;
+  -- Insert data into employee_data_source table
+    LOAD DATA INFILE '/workspaces/CSDS397-Assignment-2/employee_data_source.csv'
+    INTO TABLE employee_data_source
+    FIELDS TERMINATED BY ',' -- Specify the delimiter
+    ENCLOSED BY '"'          -- Specify optional enclosing character (if any)
+    LINES TERMINATED BY '\n' -- Specify line terminator
+    IGNORE 1 ROWS;           -- Skip the header row (if applicable)
 
     SELECT * FROM employees
   "
